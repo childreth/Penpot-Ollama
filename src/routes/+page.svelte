@@ -44,7 +44,7 @@
   }
   async function getOllama(code) {
     const response = await ollama.chat({
-      model: "codellama:7b-code",
+      model: "codellama:7b",
       messages: [
         { role: "system", content: `You are an elite coder who will receive code and need to translate it into working html. When you encounter the code use the comments contained within the provide code to update it to working interacble html form. Keep the css class name intact. Here are some comments and how to handle them: 
             * frame: input - Change this to a real input field
@@ -60,7 +60,7 @@
 <p id="testText">testing</p>
 <div>
   <p>Penpot plugin starter template</p>
-  <select bind:value={selectedModel} on:change={changeModel}>
+  <select bind:value={selectedModel} on:change={changeModel} class='select'>
     {#each modelList as question}
       <option value={question}>
         {question}
@@ -69,7 +69,7 @@
   </select>
 
   <p>Checkout the <a href="">documentation</a> to get started.</p>
-  <button id="create">Create</button>
+  <button id="create" data-appearance="primary">Create</button>
 
   <section id="" class="response" aria-live="polite" role="log">
     {@html responseMarked}
@@ -80,6 +80,5 @@
 
 <style>
   @import "@penpot/plugin-styles/styles.css";
-
   
 </style>
