@@ -1,0 +1,13 @@
+{
+  "name": "Penpot Svelte Plugin",
+  "host": "http://localhost:5174/",
+  "code": "plugin.js",
+  "description": "This is a starter plugin for Penpot",
+  "permissions": [
+    "content:read",
+    "content:write",
+    "library:read",
+    "library:write",
+    "user:read"
+  ]
+}
