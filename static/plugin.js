@@ -9,7 +9,7 @@ penpot.ui.open("Penpot plugin starter template", "",
 
 penpot.ui.onMessage((message) => {
    // msgOllama();
-    console.log('message received');
+    console.log('message received',message);
     const selectItem = penpot.getSelectedShapes();
     let hteHTML = penpot.generateMarkup(selectItem)
   console.log('clicked',selectItem,hteHTML);

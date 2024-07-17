@@ -16,7 +16,12 @@
     document.getElementById("create").onclick = () => {
       //const selectedIds = context.getSelected()
       console.log("clicked");
-
+      const onmessage = {
+                type: 'greeting',
+                text: 'Hello from the sender!',
+                number: 42,
+                isActive: true
+            };
       //penpot.ui.sendMessage("message");
       parent.postMessage(onmessage, "*");
       //parent.sendMessage('test')
@@ -59,7 +64,7 @@
 
 <p id="testText">testing</p>
 <div data-theme="dark">
-  <h2>Ollama 🦙</h2>
+  <h2>Ollamas 🦙</h2>
   <section>
     <div class="form-group">
     <label class="select-label-hidden" for="select-1">Which is your favorite animal?</label>
@@ -71,7 +76,7 @@
         {/each}
       </select>
     </div>
-    
+   
   </section>
   
 
