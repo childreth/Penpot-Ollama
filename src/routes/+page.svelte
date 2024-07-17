@@ -58,18 +58,25 @@
 </script>
 
 <p id="testText">testing</p>
-<div>
-  <p>Penpot plugin starter template</p>
-  <select bind:value={selectedModel} on:change={changeModel} class='select'>
-    {#each modelList as question}
-      <option value={question}>
-        {question}
-      </option>
-    {/each}
-  </select>
+<div data-theme="dark">
+  <h2>Ollama 🦙</h2>
+  <section>
+    <div class="form-group">
+    <label class="select-label-hidden" for="select-1">Which is your favorite animal?</label>
+    <select bind:value={selectedModel} on:change={changeModel} class='select'>
+        {#each modelList as question}
+          <option value={question}>
+            {question}
+          </option>
+        {/each}
+      </select>
+    </div>
+    
+  </section>
+  
 
   <p>Checkout the <a href="">documentation</a> to get started.</p>
-  <button id="create" data-appearance="primary">Create</button>
+  <button id="create" data-appearance="primary" class='--la-primary'>Create</button>
 
   <section id="" class="response" aria-live="polite" role="log">
     {@html responseMarked}
@@ -79,6 +86,9 @@
 <svelte:window on:message={handleMessage} />
 
 <style>
+.controls {
+    padding: var(--spacing-8)
+}
   @import "@penpot/plugin-styles/styles.css";
   
 </style>
