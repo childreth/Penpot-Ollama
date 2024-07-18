@@ -38,6 +38,7 @@
   function handleMessage(event) {
     console.log("worked", event.data);
     getOllama(event.data)
+    //getClaude()
 
   }
   function changeModel() {
@@ -47,17 +48,43 @@
     //theImage = [];
     //document.querySelector("#thumbnails").innerHTML = "";
   }
+  async function getClaude(){
+    try {
+				//guessing = true;
+				const response = await fetch("/api/claude/", {
+					method: "POST",
+					headers: new Headers({
+						"Content-Type": "application/json",
+					}),
+					body: JSON.stringify({
+						message: "userMsg34",
+						// userImage: base64,
+					}),
+				});
+				const returned = await response.json();
+				//responseEl.innerHTML = returned.message;
+				//guessing = false;
+				console.log("returned:", returned);
+			} catch (error) {
+				console.log("error: ", error);
+			}
+  }
+
   async function getOllama(code) {
     const response = await ollama.chat({
       model: "codellama:7b",
       messages: [
-        { role: "system", content: `You are an elite coder who will receive code and need to translate it into working html. When you encounter the code use the comments contained within the provide code to update it to working interacble html form. Keep the css class name intact. Here are some comments and how to handle them: 
+        { role: "system", content: `You are an elite coder who will receive html code and need to translate some of it into working html, specifically To translate the provided code into working interactive HTML form, you need to make some changes and follow these steps: 
+        * When you encounter the code use the comments contained within the provide code to update it to working interacble html form. Keep the css class name intact. 
+        * Take any inline styling and seperate it into a css class name
+        * Here are some comments and how to handle them: 
             * frame: input - Change this to a real input field
-        Do not provide an explaination with the response.`},
+        Do not provide an explaination of your thought process with the response.`},
         { role: "user", content: code }
     ],
     });
     console.log("response:", response.message.content);
+    //window.open();
     responseMarked = response.message.content;
   }
 </script>

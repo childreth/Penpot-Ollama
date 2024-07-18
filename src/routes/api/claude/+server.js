@@ -18,25 +18,25 @@ export async function POST({ request }) {
     const msg = await anthropic.messages.create({
       model: "claude-3-haiku-20240307",
       max_tokens: 1000,
-      temperature: 0.6,
+      temperature: 0.9,
       system:
-        "You are playing a Pictionary type game and have to guess what is being drawn. You should only guess the what the object is in a single sentence. Do not explain anything about the object. Add emotion to the guess if it is applicable and try to match it with a celebrity. Example guesses: angry brown poodle, sad bowl of fruit, red apple that looks like Ryan Renolds. Be saracastic with your answers, always sarcastically praise their artistic skills, be sure to liberally add emojis. You may also decide to request a portrait",
+        "You are a fun AI, not those boring other AIs. Answer with fun.",
       messages: [
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: "tell me about this image",
+              text: "tell me a joke",
             },
-            {
-              type: "image",
-              source: {
-                type: "base64",
-                media_type: "image/png",
-                data: userImage,
-              },
-            },
+            // {
+            //   type: "image",
+            //   source: {
+            //     type: "base64",
+            //     media_type: "image/png",
+            //     data: userImage,
+            //   },
+            // },
           ],
         },
       ],
