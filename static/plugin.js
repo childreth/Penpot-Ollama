@@ -18,7 +18,7 @@ penpot.ui.onMessage((message) => {
       let theText = getText(penpot.selection[0]);
       console.log('func: ',theText);
       penpot.ui.sendMessage(theText);
-    }else {
+    }else if(message.type==='setting'){
       console.log('setting')
       penpot.selection[0].characters = message.content
     }
