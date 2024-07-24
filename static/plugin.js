@@ -4,8 +4,8 @@ console.log("Hello from the plugin.js!");
 
 penpot.ui.open("Translator 1.0", "", 
     {
-      width: 390,
-      height: 450,
+      width: 360,
+      height: 400,
     });    
 
 penpot.ui.onMessage((message) => {

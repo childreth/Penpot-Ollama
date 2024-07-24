@@ -12,7 +12,7 @@
   let responseMarked = "No data";
   let languageSelected = "French";
   const languageList = [
-    "French","German","Spanish","Russian","Japanese"
+    "French","German","Spanish","Russian","Japanese","English"
   ]
 
   onMount(async () => {
@@ -110,7 +110,7 @@
       messages: [
         {
           role: "system",
-          content: `You are an amazing language translator. Translate the provided english and translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated text.`,
+          content: `You are an amazing language translator. You will be provided some content first determine the language and then translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated <text className=""></text>`,
         },
         { role: "user", content: code },
       ],
@@ -166,9 +166,9 @@
     {@html responseMarked} {languageSelected}
   </section> -->
 
-  <footer>
-    <strong>{selectedModel}</strong> may make mistakes, please don't rely on its information. Learn more about <a href='https://ollama.com/library'>Ollama models</a>.
-  </footer>
+  <!-- <footer>
+    <strong>{selectedModel}</strong> may make mistakes, always check the information provided.
+  </footer> -->
 </div>
 
 <svelte:window on:message={handleMessage} />
@@ -177,7 +177,7 @@
   @import "@penpot/plugin-styles/styles.css";
 
   h2 {
-    margin-bottom:1rem;
+    margin:1rem 0;
   }
   p {
     margin-block-end: .75rem;
@@ -200,5 +200,8 @@
     font-size:.75rem;
     line-height:1.25rem;
     font-weight: 400;
+  }
+  select {
+    background-image: url('$lib/images/chevron-down.svg');
   }
 </style>
