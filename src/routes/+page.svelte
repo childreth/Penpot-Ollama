@@ -7,7 +7,7 @@
   const modelList = data.modelNames;
   console.log(modelList);
 
-  let selectedModel = "llama3:latest";
+  let selectedModel = "llama3.1:latest";
   let activeModel = "";
   let responseMarked = "No data";
   let languageSelected = "French";
