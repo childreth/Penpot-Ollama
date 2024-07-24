@@ -1,8 +1,8 @@
 {
-  "name": "Penpot Svelte Plugin",
+  "name": "Translator 1.0",
   "host": "http://localhost:5174/",
   "code": "plugin.js",
-  "description": "This is a starter plugin for Penpot",
+  "description": "Translator 1.0",
   "permissions": [
     "content:read",
     "content:write",

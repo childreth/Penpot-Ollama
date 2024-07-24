@@ -9,23 +9,30 @@
 
   let selectedModel = "llama3:latest";
   let activeModel = "";
-  let responseMarked ='hello'
+  let responseMarked = "No data";
+  let languageSelected = "French";
+  const languageList = [
+    "French","German","Spanish","Russian","Japanese"
+  ]
 
   onMount(async () => {
     console.log("mounted!");
     document.getElementById("create").onclick = () => {
+      getText();
+    };
+    function getText() {
       //const selectedIds = context.getSelected()
       console.log("clicked");
+      //getClaude()
+
       const onmessage = {
-                type: 'greeting',
-                text: 'Hello from the sender!',
-                number: 42,
-                isActive: true
-            };
+        type: "getting",
+        done: false,
+      };
       //penpot.ui.sendMessage("message");
       parent.postMessage(onmessage, "*");
       //parent.sendMessage('test')
-    };
+    }
 
     // window.addEventListener("message", (event) => {
     //   //const test = document.querySelector('#testText')
@@ -35,11 +42,25 @@
     //getOllama();
   });
 
+  function setText(translated){
+       //const selectedIds = context.getSelected()
+       console.log("clicked");
+      //getClaude()
+
+      const onmessage = {
+        type: 'setting',
+        content: translated
+      };
+      //penpot.ui.sendMessage("message");
+      parent.postMessage(onmessage, "*");
+      //parent.sendMessage('test')
+    }
+
   function handleMessage(event) {
     console.log("worked", event.data);
-    getOllama(event.data)
+    getOllama(event.data);
     //getClaude()
-
+    //llamaFile();
   }
   function changeModel() {
     console.log("model reset");
@@ -48,54 +69,70 @@
     //theImage = [];
     //document.querySelector("#thumbnails").innerHTML = "";
   }
-  async function getClaude(){
+  async function getClaude() {
     try {
-				//guessing = true;
-				const response = await fetch("/api/claude/", {
-					method: "POST",
-					headers: new Headers({
-						"Content-Type": "application/json",
-					}),
-					body: JSON.stringify({
-						message: "userMsg34",
-						// userImage: base64,
-					}),
-				});
-				const returned = await response.json();
-				//responseEl.innerHTML = returned.message;
-				//guessing = false;
-				console.log("returned:", returned);
-			} catch (error) {
-				console.log("error: ", error);
-			}
+      //guessing = true;
+      const response = await fetch("/api/claude/", {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+        body: JSON.stringify({
+          message: "userMsg34",
+          // userImage: base64,
+        }),
+      });
+      const returned = await response.json();
+      //responseEl.innerHTML = returned.message;
+      //guessing = false;
+      console.log("returned:", returned);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }
+
+  // let prompt = `You are an amazing language translator. Translate the provided english and translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated text.`;
+
+  async function llamaFile() {
+    let response = await fetch("http://127.0.0.1:8080/completion", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt,
+        n_predict: 512,
+      }),
+    });
+    console.log((await response.json()).content);
   }
 
   async function getOllama(code) {
     const response = await ollama.chat({
-      model: "codellama:7b",
+      model: selectedModel,
       messages: [
-        { role: "system", content: `You are an elite coder who will receive html code and need to translate some of it into working html, specifically To translate the provided code into working interactive HTML form, you need to make some changes and follow these steps: 
-        * When you encounter the code use the comments contained within the provide code to update it to working interacble html form. Keep the css class name intact. 
-        * Take any inline styling and seperate it into a css class name
-        * Here are some comments and how to handle them: 
-            * frame: input - Change this to a real input field
-        Do not provide an explaination of your thought process with the response.`},
-        { role: "user", content: code }
-    ],
+        {
+          role: "system",
+          content: `You are an amazing language translator. Translate the provided english and translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated text.`,
+        },
+        { role: "user", content: code },
+      ],
     });
     console.log("response:", response.message.content);
     //window.open();
-    responseMarked = response.message.content;
+    setText(response.message.content);
+    //responseMarked = response.message.content;
   }
 </script>
 
-<p id="testText">testing</p>
-<div data-theme="dark">
-  <h2>Ollamas 🦙</h2>
+<div data-theme="dark" style="padding:16px 0;">
+  <h2>Translator 1.0 🦙</h2>
   <section>
     <div class="form-group">
-    <label class="select-label-hidden" for="select-1">Which is your favorite animal?</label>
-    <select bind:value={selectedModel} on:change={changeModel} class='select'>
+      <label class="" for="models">Choose a model</label>
+      <select
+        bind:value={selectedModel}
+        on:change={changeModel}
+        class="select"
+        id="models"
+      >
         {#each modelList as question}
           <option value={question}>
             {question}
@@ -103,24 +140,65 @@
         {/each}
       </select>
     </div>
-   
+    <div class="form-group">
+      <label class=""
+      for="languages" >Choose a language</label>
+      <select bind:value={languageSelected} class="select" id="languages">
+        {#each languageList as language}
+          <option value={language}>
+            {language}
+          </option>
+        {/each}
+      </select>
+    </div>
+    <!-- <div class="form-group">
+      <label class="input-label-hidden" for="input-3">This is the label</label>
+      <input class="input error" type="text" placeholder="Input
+   dark theme error" id="input-3">
+    </div> -->
   </section>
-  
 
-  <p>Checkout the <a href="">documentation</a> to get started.</p>
-  <button id="create" data-appearance="primary" class='--la-primary'>Create</button>
+  <button id="create" data-appearance="primary" class="--la-primary"
+    >Translate to {languageSelected}</button
+  >
 
-  <section id="" class="response" aria-live="polite" role="log">
-    {@html responseMarked}
-  </section>
+  <!-- <section id="" class="response" aria-live="polite" role="log">
+    {@html responseMarked} {languageSelected}
+  </section> -->
+
+  <footer>
+    <strong>{selectedModel}</strong> may make mistakes, please don't rely on its information. Learn more about <a href='https://ollama.com/library'>Ollama models</a>.
+  </footer>
 </div>
 
 <svelte:window on:message={handleMessage} />
 
 <style>
-.controls {
-    padding: var(--spacing-8)
-}
   @import "@penpot/plugin-styles/styles.css";
-  
+
+  h2 {
+    margin-bottom:1rem;
+  }
+  p {
+    margin-block-end: .75rem;
+  }
+  #create {
+    margin-top:1rem;
+  }
+  .response {
+    padding: 24px 0;
+  }
+  .form-group {
+    margin-block-end: 1rem;
+  }
+  label {
+    font-size:.75rem;
+    line-height:1.75rem;
+  }
+  footer {
+    margin-block-start: 2rem;
+    font-size:.75rem;
+    line-height:1.25rem;
+    font-weight: 400;
+  }
 </style>
