@@ -34,14 +34,23 @@ penpot.ui.onMessage((message) => {
       //console.log('func: ',theText);
       penpot.ui.sendMessage(textBlocks);
     }else if(message.type==='setting'){
-      console.log('setting',message.content)
-      theGroup.map((item) => {
+      //console.log('setting',JSON.parse(message.content))
+      let translated = JSON.parse(message.content)
+      let key = 0
+      theGroup.forEach((item) => {
         
         if(item.type==='text'){
-          item.characters = 'halp'
+          key++
+          item.characters = translated[`text`+key]
         }
       });
-      penpot.selection[0].characters = message.content
+      // theGroup.map((item) => {
+        
+      //   if(item.type==='text'){
+      //     item.characters = translated.text[index]
+      //   }
+      // });
+      //penpot.selection[0].characters = message.content
     }
 
    // let hteHTML = penpot.generateMarkup(selectItem)
