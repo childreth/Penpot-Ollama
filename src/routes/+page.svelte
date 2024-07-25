@@ -127,7 +127,7 @@
 </script>
 
 <div data-theme="dark" style="padding:16px 0;">
-  <h2>Translator 1.Ollama 🦙</h2>
+  <h2>Translate with Ollama 🦙</h2>
   <section>
     <div class="form-group">
       <label class="" for="models">Choose a model</label>
@@ -171,7 +171,7 @@
   </section> -->
 
   <!-- <footer>
-    <strong>{selectedModel}</strong> may make mistakes, always check the information provided.
+    <strong>{selectedModel}</strong> may make mistakes, always check the information provided. Lear
   </footer> -->
 </div>
 
@@ -200,7 +200,7 @@
     line-height:1.75rem;
   }
   footer {
-    margin-block-start: 2rem;
+    margin-block-start: 1rem;
     font-size:.75rem;
     line-height:1.25rem;
     font-weight: 400;
