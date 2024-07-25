@@ -57,8 +57,8 @@
     }
 
   function handleMessage(event) {
-    console.log("worked", event.data);
-    getOllama(event.data);
+    console.log("worked", JSON.stringify(event.data));
+    getOllama(JSON.stringify(event.data));
     //getClaude()
     //llamaFile();
   }
@@ -107,23 +107,24 @@
   async function getOllama(code) {
     const response = await ollama.chat({
       model: selectedModel,
+      format: 'json',
       messages: [
         {
           role: "system",
-          content: `You are an amazing language translator. You will be provided some content first determine the language and then translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated <text className=""></text>`,
+          content: `You are an amazing language translator. You will be provided some content first determine the language and then translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated text. When returning JSON each key as increment of the word 'text'. Example text1, text2`,
         },
         { role: "user", content: code },
       ],
     });
     console.log("response:", response.message.content);
-    //window.open();
+   
     setText(response.message.content);
     //responseMarked = response.message.content;
   }
 </script>
 
 <div data-theme="dark" style="padding:16px 0;">
-  <h2>Translator 1.0 🦙</h2>
+  <h2>Translator 1.Ollama 🦙</h2>
   <section>
     <div class="form-group">
       <label class="" for="models">Choose a model</label>

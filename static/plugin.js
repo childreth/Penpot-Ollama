@@ -14,12 +14,33 @@ penpot.ui.onMessage((message) => {
     // const selectedGroup = penpot.getSelectedShapes();
     // const cloneGroup = penpot.cloneGroup()
     //const selectItem = penpot.getSelected(); 
+
+    let theGroup = penpot.selection[0].children
+    let textBlocks=[]
+
+    //find text types
+
+    
+    
     if (message.type==='getting'){
-      let theText = getText(penpot.selection[0]);
-      console.log('func: ',theText);
-      penpot.ui.sendMessage(theText);
+      //let theText = getText(penpot.selection[0]);
+      theGroup.map((item) => {
+        console.log('theGroup: ',item.id,'-',item.type)
+        if(item.type==='text'){
+          textBlocks.push(item.characters)
+        }
+      });
+
+      //console.log('func: ',theText);
+      penpot.ui.sendMessage(textBlocks);
     }else if(message.type==='setting'){
-      console.log('setting')
+      console.log('setting',message.content)
+      theGroup.map((item) => {
+        
+        if(item.type==='text'){
+          item.characters = 'halp'
+        }
+      });
       penpot.selection[0].characters = message.content
     }
 
