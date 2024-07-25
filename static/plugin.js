@@ -1,6 +1,3 @@
-console.log("Hello from the plugin.js!");
-
-
 
 penpot.ui.open("Translator 1.0", "", 
     {
@@ -19,22 +16,19 @@ penpot.ui.onMessage((message) => {
     let textBlocks=[]
 
     //find text types
-
-    
-    
     if (message.type==='getting'){
       //let theText = getText(penpot.selection[0]);
       theGroup.map((item) => {
-        console.log('theGroup: ',item.id,'-',item.type)
+        //console.log('theGroup: ',item.id,'-',item.type)
         if(item.type==='text'){
           textBlocks.push(item.characters)
         }
       });
-
-      //console.log('func: ',theText);
       penpot.ui.sendMessage(textBlocks);
-    }else if(message.type==='setting'){
-      //console.log('setting',JSON.parse(message.content))
+
+    }
+    else if(message.type==='setting'){
+      
       let translated = JSON.parse(message.content)
       let key = 0
       theGroup.forEach((item) => {
@@ -44,21 +38,15 @@ penpot.ui.onMessage((message) => {
           item.characters = translated[`text`+key]
         }
       });
-      // theGroup.map((item) => {
-        
-      //   if(item.type==='text'){
-      //     item.characters = translated.text[index]
-      //   }
-      // });
-      //penpot.selection[0].characters = message.content
     }
 
-   // let hteHTML = penpot.generateMarkup(selectItem)
+ 
   
   //penpot.closePlugin()
   });
 
 //gets text from a single text block
+
   function getText(theSelected){
     if(theSelected.type==='text'){
       console.log(theSelected,'**istext**',penpot.selection[0].characters);
@@ -71,6 +59,12 @@ penpot.ui.onMessage((message) => {
   }
 
   function setText(translated) {
+
+  }
+
+  function getHTML(){
+
+    // let hteHTML = penpot.generateMarkup(selectItem)
 
   }
 

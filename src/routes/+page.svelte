@@ -12,7 +12,7 @@
   let responseMarked = "No data";
   let languageSelected = "French";
   const languageList = [
-    "French","German","Spanish","Russian","Japanese","English"
+    "French","German","Spanish","Russian","Thai","English","Italian","Portuguese"
   ]
 
   onMount(async () => {
@@ -91,7 +91,6 @@
     }
   }
 
-  // let prompt = `You are an amazing language translator. Translate the provided english and translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated text.`;
 
   async function llamaFile() {
     let response = await fetch("http://127.0.0.1:8080/completion", {
@@ -111,7 +110,11 @@
       messages: [
         {
           role: "system",
-          content: `You are an amazing language translator. You will be provided some content first determine the language and then translate it into ${languageSelected}. When returning translated text, do not add explaination, just send the translated text. When returning JSON each key as increment of the word 'text'. Example text1, text2`,
+          content: `You are an amazing language translatorn and will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
+          - do not add explaination, just send the translated text. 
+          - return JSON format and each key incremented with the word 'text'. Example text1, text2
+          `
+          
         },
         { role: "user", content: code },
       ],
