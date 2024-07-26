@@ -1,8 +1,8 @@
 
 penpot.ui.open("Translator 1.0", "", 
     {
-      width: 360,
-      height: 400,
+      width: 340,
+      height: 430,
     });    
 
 penpot.ui.onMessage((message) => {

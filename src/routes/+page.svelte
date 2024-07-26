@@ -3,7 +3,7 @@
   import ollama from "ollama";
 
   export let data;
-  //console.log('page:',data.modelNames)
+  
   const modelList = data.modelNames;
   console.log(modelList);
 
@@ -31,7 +31,6 @@
       };
       //penpot.ui.sendMessage("message");
       parent.postMessage(onmessage, "*");
-      //parent.sendMessage('test')
     }
 
     // window.addEventListener("message", (event) => {
@@ -55,20 +54,13 @@
       parent.postMessage(onmessage, "*");
       //parent.sendMessage('test')
     }
-
+//handles the return message
   function handleMessage(event) {
-    console.log("worked", JSON.stringify(event.data));
     getOllama(JSON.stringify(event.data));
     //getClaude()
     //llamaFile();
   }
-  function changeModel() {
-    console.log("model reset");
-    //countConvo = 0;
-    //chatConvo = [];
-    //theImage = [];
-    //document.querySelector("#thumbnails").innerHTML = "";
-  }
+
   async function getClaude() {
     try {
       //guessing = true;
@@ -110,9 +102,9 @@
       messages: [
         {
           role: "system",
-          content: `You are an amazing language translatorn and will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
-          - do not add explaination, just send the translated text. 
-          - return JSON format and each key incremented with the word 'text'. Example text1, text2
+          content: `You are a language translator that will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
+          - Do not add an explaination, just send the translated text. 
+          - Return JSON and each key incremented with the word 'text' and number. Example text1, text2
           `
           
         },
@@ -127,13 +119,12 @@
 </script>
 
 <div data-theme="dark" style="padding:16px 0;">
-  <h2>Translate with Ollama 🦙</h2>
+  <h2>Translate with 🦙</h2>
   <section>
     <div class="form-group">
       <label class="" for="models">Choose a model</label>
       <select
         bind:value={selectedModel}
-        on:change={changeModel}
         class="select"
         id="models"
       >
@@ -155,11 +146,7 @@
         {/each}
       </select>
     </div>
-    <!-- <div class="form-group">
-      <label class="input-label-hidden" for="input-3">This is the label</label>
-      <input class="input error" type="text" placeholder="Input
-   dark theme error" id="input-3">
-    </div> -->
+
   </section>
 
   <button id="create" data-appearance="primary" class="--la-primary"
@@ -170,9 +157,9 @@
     {@html responseMarked} {languageSelected}
   </section> -->
 
-  <!-- <footer>
-    <strong>{selectedModel}</strong> may make mistakes, always check the information provided. Lear
-  </footer> -->
+  <footer>
+    <strong>{selectedModel}</strong> may make mistakes, always check the information provided.
+  </footer>
 </div>
 
 <svelte:window on:message={handleMessage} />
@@ -181,7 +168,7 @@
   @import "@penpot/plugin-styles/styles.css";
 
   h2 {
-    margin:1rem 0;
+    margin:.5rem 0 .75rem 0;
   }
   p {
     margin-block-end: .75rem;
