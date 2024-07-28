@@ -41,22 +41,30 @@
     //getOllama();
   });
 
-  function setText(translated){
+  function setText(key,translated){
        //const selectedIds = context.getSelected()
-       console.log("clicked");
+       //console.log("setText before: ",key,'--',translated);
       //getClaude()
 
       const onmessage = {
         type: 'setting',
+        blockid: key,
         content: translated
       };
-      //penpot.ui.sendMessage("message");
+      console.log('setText onmessage: ',onmessage)
       parent.postMessage(onmessage, "*");
+      //penpot.ui.sendMessage("message");
       //parent.sendMessage('test')
     }
 //handles the return message
   function handleMessage(event) {
-    getOllama(JSON.stringify(event.data));
+    //getOllama(JSON.stringify(event.data));
+    let blocks = event.data
+    console.log('event.data',Object.values(blocks).length)
+    Object.entries(blocks).forEach(async ([key, value]) => {
+      console.log(`${key}: ${value}`);
+      getOllama(key,value)
+    });
     //getClaude()
     //llamaFile();
   }
@@ -95,25 +103,24 @@
     console.log((await response.json()).content);
   }
 
-  async function getOllama(code) {
+  async function getOllama(key,value) {
     const response = await ollama.chat({
       model: selectedModel,
-      format: 'json',
+      // format: 'json',
       messages: [
         {
           role: "system",
           content: `You are a language translator that will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
-          - Do not add an explaination, just send the translated text. 
-          - Return JSON and each key incremented with the word 'text' and number. Example text1, text2
+           * Do not add an explaination, just send the translated text. 
           `
           
         },
-        { role: "user", content: code },
+        { role: "user", content: value },
       ],
     });
-    console.log("response:", response.message.content);
-   
-    setText(response.message.content);
+    console.log("response getOllama:",key,'----', response.message.content);
+    
+    setText(key,response.message.content);
     //responseMarked = response.message.content;
   }
 </script>
