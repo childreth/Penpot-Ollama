@@ -11,20 +11,29 @@
   let activeModel = "";
   let responseMarked = "No data";
   let languageSelected = "French";
+  let translateTime = 0.0;
+  let blockCount=0;
+  $: translateTime = Number(translateTime.toFixed(1));
+  let translateTimer
+
+
+
   const languageList = [
     "French","German","Spanish","Russian","Thai","English","Italian","Portuguese"
   ]
 
   onMount(async () => {
+
     console.log("mounted!");
     document.getElementById("create").onclick = () => {
       getText();
+      translateTime=0.0
     };
+
     function getText() {
       //const selectedIds = context.getSelected()
-      console.log("clicked");
       //getClaude()
-
+      incrementTimeout()
       const onmessage = {
         type: "getting",
         done: false,
@@ -32,6 +41,7 @@
       //penpot.ui.sendMessage("message");
       parent.postMessage(onmessage, "*");
     }
+    // keep for reference
 
     // window.addEventListener("message", (event) => {
     //   //const test = document.querySelector('#testText')
@@ -40,10 +50,21 @@
     // });
     //getOllama();
   });
+  function incrementTimeout(stop) {
+    if(!stop){
+      translateTimer = setInterval(() => {
+      translateTime += .1
+    }, 100);
+    }else if(stop){
+      clearInterval(translateTimer)
+    } else {
+    }
+  }
+
+  
 
   function setText(key,translated){
-       //const selectedIds = context.getSelected()
-       //console.log("setText before: ",key,'--',translated);
+      //const selectedIds = context.getSelected()
       //getClaude()
 
       const onmessage = {
@@ -51,19 +72,23 @@
         blockid: key,
         content: translated
       };
-      console.log('setText onmessage: ',onmessage)
+      //console.log('setText onmessage: ',onmessage)
       parent.postMessage(onmessage, "*");
       //penpot.ui.sendMessage("message");
       //parent.sendMessage('test')
     }
+
 //handles the return message
+
   function handleMessage(event) {
     //getOllama(JSON.stringify(event.data));
     let blocks = event.data
-    console.log('event.data',Object.values(blocks).length)
+    let blockTotal = Object.values(blocks).length
+    //console.log('event.data',Object.values(blocks).length)
     Object.entries(blocks).forEach(async ([key, value]) => {
-      console.log(`${key}: ${value}`);
-      getOllama(key,value)
+      //console.log(`${key}: ${value}`);
+      //let blockNum++
+      getOllama(key,value,blockTotal)
     });
     //getClaude()
     //llamaFile();
@@ -103,7 +128,7 @@
     console.log((await response.json()).content);
   }
 
-  async function getOllama(key,value) {
+  async function getOllama(key,value,blockTotal) {
     const response = await ollama.chat({
       model: selectedModel,
       // format: 'json',
@@ -111,22 +136,26 @@
         {
           role: "system",
           content: `You are a language translator that will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
-           * Do not add an explaination, just send the translated text. 
+           * Do not add explainations for the text or thought process for translating, ONLY send the translated text.
           `
           
         },
         { role: "user", content: value },
       ],
     });
-    console.log("response getOllama:",key,'----', response.message.content);
+    blockCount++
+    //console.log(`blocks: ${blockTotal}, ${blockCount}`)
+    blockCount == blockTotal ? incrementTimeout(true) : null;
+
+    console.log("Ollama response:", response.message.content);
     
     setText(key,response.message.content);
-    //responseMarked = response.message.content;
+    
   }
 </script>
 
 <div data-theme="dark" style="padding:16px 0;">
-  <h2>Translate with 🦙</h2>
+  <h2>Translate <span class='badge caption'>Beta</span></h2>
   <section>
     <div class="form-group">
       <label class="" for="models">Choose a model</label>
@@ -163,7 +192,7 @@
   <!-- <section id="" class="response" aria-live="polite" role="log">
     {@html responseMarked} {languageSelected}
   </section> -->
-
+<section id='timeblock'><p>Translation time: <span id='time'>{translateTime}</span> secs</p></section>
   <footer>
     <strong>{selectedModel}</strong> may make mistakes, always check the information provided.
   </footer>
@@ -176,10 +205,30 @@
 
   h2 {
     margin:.5rem 0 .75rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap:.5rem;
+  }
+  .badge {
+    background-color: var(--app-lemon);
+    border-radius: 1rem;
+    color: var(--lf-primary);
+    padding: .1rem .5rem;
+    margin-top:.1rem;
+ 
   }
   p {
     margin-block-end: .75rem;
   }
+  #timeblock {
+    padding-top:.5rem;
+    font-size: .75rem;
+    
+  }
+  #time {
+      color: var(--app-lemon)
+    }
   #create {
     margin-top:1rem;
   }

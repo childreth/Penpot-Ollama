@@ -1,27 +1,30 @@
 
-penpot.ui.open("Translator 1.0", "", 
+penpot.ui.open("Translate - Plugin Beta", "", 
     {
       width: 340,
-      height: 430,
+      height: 460,
     });    
 
 penpot.ui.onMessage((message) => {
     // msgOllama();
-    console.log('message received: ', message.type,'--',message.blockid,'--',message.content);
+    //console.log('message received: ',message, message.type,'--',message.blockid,'--',message.content);
     // const selectedGroup = penpot.getSelectedShapes();
     // const cloneGroup = penpot.cloneGroup()
     // const selectItem = penpot.getSelected(); 
 
     let theGroup = penpot.selection[0].children
+    //console.log('theGroup: ',penpot.selection)
     //let textBlocks=[]
     let textJson={}
+
 
     //find text types
     if (message.type==='getting'){
       //let theText = getText(penpot.selection[0]);
+      
       theGroup.forEach((item,index) => {
         if(item.type==='text'){
-          console.log('itemid-',item.id)
+          //console.log('itemid-',item.id)
           //textBlocks.push(item.characters)
           textJson[item.id] = item.characters
         }

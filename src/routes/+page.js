@@ -14,7 +14,7 @@ export async function load() {
     })
     //manually add names here
 
-    modelNames.push("Stable Diffusion","Canary Chrome");
+    //modelNames.push("Stable Diffusion","Canary Chrome");
    
 
    return {modelNames};
