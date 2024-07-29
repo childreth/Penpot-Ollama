@@ -27,6 +27,7 @@
     console.log("mounted!");
     document.getElementById("create").onclick = () => {
       getText();
+      this.setAttribute('disabled',true);
       translateTime=0.0
     };
 
@@ -55,7 +56,8 @@
       translateTime += .1
     }, 100);
     }else if(stop){
-      clearInterval(translateTimer)
+      clearInterval(translateTimer);
+      blockCount=0
     } else {
     }
   }

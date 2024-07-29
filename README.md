@@ -1,8 +1,11 @@
-# Penpot 
-
+# Translation Plugin - Penpot beta plugin
+Exploring the new Penpot plugin beta 
 
 ## Ollama locahost for CORS issues
-run: launchctl setenv OLLAMA_ORIGINS "*"
+
+run in terminal: 
+* launchctl setenv OLLAMA_ORIGINS "*"
+* launchctl setenv OLLAMA_ORIGINS "http://localhost:5174/*"
 
 
 ## Running

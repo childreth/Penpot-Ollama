@@ -7,7 +7,7 @@ export async function load() {
     let models = await ollama.list();
     let theModels = models.models;
 
-    console.log('models', models);
+    //console.log('models', models);
     
     const modelNames = theModels.map(modelName => {
         return modelName.name;
