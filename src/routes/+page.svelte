@@ -32,7 +32,6 @@
 
     function getText() {
       //const selectedIds = context.getSelected()
-      //getClaude()
       incrementTimeout()
       const onmessage = {
         type: "getting",
@@ -65,7 +64,6 @@
 
   function setText(key,translated){
       //const selectedIds = context.getSelected()
-      //getClaude()
 
       const onmessage = {
         type: 'setting',
@@ -84,37 +82,14 @@
     //getOllama(JSON.stringify(event.data));
     let blocks = event.data
     let blockTotal = Object.values(blocks).length
-    //console.log('event.data',Object.values(blocks).length)
+    
     Object.entries(blocks).forEach(async ([key, value]) => {
       //console.log(`${key}: ${value}`);
-      //let blockNum++
       getOllama(key,value,blockTotal)
     });
-    //getClaude()
     //llamaFile();
   }
 
-  async function getClaude() {
-    try {
-      //guessing = true;
-      const response = await fetch("/api/claude/", {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-        body: JSON.stringify({
-          message: "userMsg34",
-          // userImage: base64,
-        }),
-      });
-      const returned = await response.json();
-      //responseEl.innerHTML = returned.message;
-      //guessing = false;
-      console.log("returned:", returned);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  }
 
 
   async function llamaFile() {
@@ -136,7 +111,7 @@
         {
           role: "system",
           content: `You are a language translator that will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
-           * Do not add explainations for the text or thought process for translating, ONLY send the translated text.
+           * Do not add explainations for the text, extra context or thought process for translating, ONLY send the translated text.
           `
           
         },
@@ -144,7 +119,7 @@
       ],
     });
     blockCount++
-    //console.log(`blocks: ${blockTotal}, ${blockCount}`)
+    console.log(`blocks: ${blockTotal}, ${blockCount}`)
     blockCount == blockTotal ? incrementTimeout(true) : null;
 
     console.log("Ollama response:", response.message.content);

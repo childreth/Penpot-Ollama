@@ -39,7 +39,6 @@ penpot.ui.onMessage((message) => {
       //console.log('set: ',message.key,'--',message.translated)
       theGroup.forEach((item,index) => {
         if(item.type==='text' && item.id === message.blockid){
-          
           //item.characters = translated['text'+index]
           item.characters = message.content
         }
