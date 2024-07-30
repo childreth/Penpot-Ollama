@@ -27,9 +27,12 @@
     console.log("mounted!");
     document.getElementById("create").onclick = () => {
       getText();
-      this.setAttribute('disabled',true);
+      disablePrimary('true')
       translateTime=0.0
     };
+    //disabled on translating 
+
+    
 
     function getText() {
       //const selectedIds = context.getSelected()
@@ -57,12 +60,18 @@
     }, 100);
     }else if(stop){
       clearInterval(translateTimer);
+      disablePrimary('false')
       blockCount=0
     } else {
     }
   }
 
-  
+  function disablePrimary(state){
+      const primaryAction =  document.getElementById("create")
+      //primaryAction.setAttribute('disabled',`${state}`);
+      //state ? primaryAction.innerText='Translating...' : primaryAction.innerText=`Translate to ${languageSelected}`;
+
+    }
 
   function setText(key,translated){
       //const selectedIds = context.getSelected()

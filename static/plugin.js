@@ -6,15 +6,11 @@ penpot.ui.open("Translate - Plugin Beta", "",
     });    
 
 penpot.ui.onMessage((message) => {
-    // msgOllama();
     //console.log('message received: ',message, message.type,'--',message.blockid,'--',message.content);
-    // const selectedGroup = penpot.getSelectedShapes();
-    // const cloneGroup = penpot.cloneGroup()
-    // const selectItem = penpot.getSelected(); 
+
 
     let theGroup = penpot.selection[0].children
     //console.log('theGroup: ',penpot.selection)
-    //let textBlocks=[]
     let textJson={}
 
 
@@ -44,7 +40,6 @@ penpot.ui.onMessage((message) => {
         }
       });
     }
-
   //penpot.closePlugin()
   });
 
@@ -67,7 +62,7 @@ penpot.ui.onMessage((message) => {
 
   function getHTML(){
 
-    // let hteHTML = penpot.generateMarkup(selectItem)
+    // let theHTML = penpot.generateMarkup(selectItem)
 
   }
 
