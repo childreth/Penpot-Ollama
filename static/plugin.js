@@ -1,7 +1,7 @@
 
 penpot.ui.open("Translate - Plugin Beta", "", 
     {
-      width: 340,
+      width: 384,
       height: 460,
     });    
 
@@ -12,6 +12,8 @@ penpot.ui.onMessage((message) => {
     let theGroup = penpot.selection[0].children
     //console.log('theGroup: ',penpot.selection)
     let textJson={}
+    let originalText={}
+    
 
 
     //find text types
@@ -23,6 +25,7 @@ penpot.ui.onMessage((message) => {
           //console.log('itemid-',item.id)
           //textBlocks.push(item.characters)
           textJson[item.id] = item.characters
+          originalText[item.id] = item.characters
         }
       });
       //console.log('textBlocks get: ',textJson)
@@ -37,6 +40,14 @@ penpot.ui.onMessage((message) => {
         if(item.type==='text' && item.id === message.blockid){
           //item.characters = translated['text'+index]
           item.characters = message.content
+        }
+      });
+    } else if(message.type==='reset'){
+      theGroup.forEach((item,index) => {
+        if(item.type==='text'){
+          //item.characters = translated['text'+index]
+          console.log('originalText: ',originalText)
+          //item.characters = message.content
         }
       });
     }

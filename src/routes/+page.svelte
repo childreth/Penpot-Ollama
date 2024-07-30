@@ -13,7 +13,8 @@
   let languageSelected = "French";
   let translateTime = 0.0;
   let blockCount=0;
-  $: translateTime = Number(translateTime.toFixed(1));
+  let tokenCount=0
+  $: translateTime = Number(translateTime.toFixed(2));
   let translateTimer
 
 
@@ -30,6 +31,9 @@
       disablePrimary('true')
       translateTime=0.0
     };
+    document.getElementById("reset").onclick = () => {
+      resetText()
+    }
     //disabled on translating 
 
     
@@ -86,6 +90,19 @@
       //penpot.ui.sendMessage("message");
       //parent.sendMessage('test')
     }
+    function resetText(){
+      //const selectedIds = context.getSelected()
+
+      const onmessage = {
+        type: 'reset',
+        blockid: 'key',
+        content: 'translated'
+      };
+      //console.log('setText onmessage: ',onmessage)
+      parent.postMessage(onmessage, "*");
+      //penpot.ui.sendMessage("message");
+      //parent.sendMessage('test')
+    }
 
 //handles the return message
 
@@ -115,6 +132,9 @@
   }
 
   async function getOllama(key,value,blockTotal) {
+
+   
+
     const response = await ollama.chat({
       model: selectedModel,
       // format: 'json',
@@ -132,8 +152,10 @@
     blockCount++
     console.log(`blocks: ${blockTotal}, ${blockCount}`)
     blockCount == blockTotal ? incrementTimeout(true) : null;
-
-    console.log("Ollama response:", response.message.content);
+    //get tokens per sec (eval_count)
+    tokenCount += response.eval_count
+    console.log("Ollama response:", response.eval_count
+    );
     
     setText(key,response.message.content);
     
@@ -171,17 +193,20 @@
 
   </section>
 
-  <button id="create" data-appearance="primary" class="--la-primary"
+  <button id="create" data-appearance="primary"
     >Translate to {languageSelected}</button
+  >
+  <button id="reset" data-appearance="secondary"
+    >Reset</button
   >
 
   <!-- <section id="" class="response" aria-live="polite" role="log">
     {@html responseMarked} {languageSelected}
   </section> -->
-<section id='timeblock'><p>Translation time: <span id='time'>{translateTime}</span> secs</p></section>
-  <footer>
+<section id='timeblock'><p>Translation time: <span id='time' class='highlightText'>{translateTime}</span> secs - Token count: <span class='highlightText'>{tokenCount}</span></p></section>
+  <!-- <footer>
     <strong>{selectedModel}</strong> may make mistakes, always check the information provided.
-  </footer>
+  </footer> -->
 </div>
 
 <svelte:window on:message={handleMessage} />
@@ -208,11 +233,11 @@
     margin-block-end: .75rem;
   }
   #timeblock {
-    padding-top:.5rem;
+    padding-top:1rem;
     font-size: .75rem;
     
   }
-  #time {
+.highlightText {
       color: var(--app-lemon)
     }
   #create {
