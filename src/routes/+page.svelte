@@ -14,9 +14,12 @@
   let translateTime = 0.0;
   let blockCount=0;
   let tokenCount=0
+  let tokenDuration=0;
   $: translateTime = Number(translateTime.toFixed(2));
-  let translateTimer
+  let translateTimer;
+  $: tokenSpeed = tokenCount / tokenDuration * 10^9;
 
+  
 
 
   const languageList = [
@@ -28,7 +31,7 @@
     console.log("mounted!");
     document.getElementById("create").onclick = () => {
       getText();
-      disablePrimary('true')
+      disablePrimary(true)
       translateTime=0.0
     };
     document.getElementById("reset").onclick = () => {
@@ -64,15 +67,17 @@
     }, 100);
     }else if(stop){
       clearInterval(translateTimer);
-      disablePrimary('false')
+      disablePrimary(false)
       blockCount=0
+      tokenCount=0
+      tokenDuration=0
     } else {
     }
   }
 
   function disablePrimary(state){
-      const primaryAction =  document.getElementById("create")
-      //primaryAction.setAttribute('disabled',`${state}`);
+      const primaryAction =  document.getElementById("create");
+      state ? primaryAction.setAttribute('disabled',true): primaryAction.removeAttribute('disabled');
       //state ? primaryAction.innerText='Translating...' : primaryAction.innerText=`Translate to ${languageSelected}`;
 
     }
@@ -131,6 +136,8 @@
     console.log((await response.json()).content);
   }
 
+  
+
   async function getOllama(key,value,blockTotal) {
 
    
@@ -142,7 +149,8 @@
         {
           role: "system",
           content: `You are a language translator that will be provided content. First determine the language and then translate it into ${languageSelected}. When returning translated text follow these instructions:
-           * Do not add explainations for the text, extra context or thought process for translating, ONLY send the translated text.
+           * Do not add explainations for the text, extra context or any reasoningfor translating
+           * ONLY send the translated text.
           `
           
         },
@@ -154,8 +162,8 @@
     blockCount == blockTotal ? incrementTimeout(true) : null;
     //get tokens per sec (eval_count)
     tokenCount += response.eval_count
-    console.log("Ollama response:", response.eval_count
-    );
+    tokenDuration += response.eval_duration
+    console.log("Ollama response:", tokenCount,tokenDuration);
     
     setText(key,response.message.content);
     
@@ -203,10 +211,8 @@
   <!-- <section id="" class="response" aria-live="polite" role="log">
     {@html responseMarked} {languageSelected}
   </section> -->
-<section id='timeblock'><p>Translation time: <span id='time' class='highlightText'>{translateTime}</span> secs - Token count: <span class='highlightText'>{tokenCount}</span></p></section>
-  <!-- <footer>
-    <strong>{selectedModel}</strong> may make mistakes, always check the information provided.
-  </footer> -->
+<section id='timeblock'><p>Translation time: <span id='time' class='highlightText'>{translateTime} - {tokenSpeed}</span> secs - Token count: <span class='highlightText'>{tokenCount}</span></p></section>
+
 </div>
 
 <svelte:window on:message={handleMessage} />
@@ -243,21 +249,12 @@
   #create {
     margin-top:1rem;
   }
-  .response {
-    padding: 24px 0;
-  }
   .form-group {
     margin-block-end: 1rem;
   }
   label {
     font-size:.75rem;
     line-height:1.75rem;
-  }
-  footer {
-    margin-block-start: 1rem;
-    font-size:.75rem;
-    line-height:1.25rem;
-    font-weight: 400;
   }
   select {
     background-image: url('$lib/images/chevron-down.svg');
