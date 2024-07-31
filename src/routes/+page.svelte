@@ -15,9 +15,10 @@
   let blockCount=0;
   let tokenCount=0
   let tokenDuration=0;
+  let totalDuration=0;
   $: translateTime = Number(translateTime.toFixed(2));
   let translateTimer;
-  $: tokenSpeed = tokenCount / tokenDuration * 10^9;
+  $: tokenSpeed = Number(tokenCount / tokenDuration * Math.pow(10,9)).toFixed(2);
 
   
 
@@ -62,15 +63,16 @@
   });
   function incrementTimeout(stop) {
     if(!stop){
+      tokenCount=0;
+      tokenDuration=0;
       translateTimer = setInterval(() => {
-      translateTime += .1
+      translateTime += .10
     }, 100);
     }else if(stop){
+      console.log('clear time')
       clearInterval(translateTimer);
       disablePrimary(false)
       blockCount=0
-      tokenCount=0
-      tokenDuration=0
     } else {
     }
   }
@@ -159,15 +161,17 @@
     });
     blockCount++
     console.log(`blocks: ${blockTotal}, ${blockCount}`)
-    blockCount == blockTotal ? incrementTimeout(true) : null;
-    //get tokens per sec (eval_count)
-    tokenCount += response.eval_count
-    tokenDuration += response.eval_duration
-    console.log("Ollama response:", tokenCount,tokenDuration);
     
+    //get tokens per sec (eval_count)
+    console.log('tokens-',response.eval_count);
+    tokenCount += response.eval_count;
+    tokenDuration += response.eval_duration;
+    totalDuration += response.total_duration;
     setText(key,response.message.content);
+    blockCount == blockTotal ? incrementTimeout(true) : null;
     
   }
+
 </script>
 
 <div data-theme="dark" style="padding:16px 0;">
@@ -211,7 +215,7 @@
   <!-- <section id="" class="response" aria-live="polite" role="log">
     {@html responseMarked} {languageSelected}
   </section> -->
-<section id='timeblock'><p>Translation time: <span id='time' class='highlightText'>{translateTime} - {tokenSpeed}</span> secs - Token count: <span class='highlightText'>{tokenCount}</span></p></section>
+<section id='timeblock'><p>Translation time: <span id='time' class='highlightText'>{translateTime}</span> secs</p><p>Tokens/sec: <span class='highlightText'>{tokenSpeed}</span></p><p>Total tokens: <span class='highlightText'>{tokenCount}</span></p></section>
 
 </div>
 
