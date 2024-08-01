@@ -72,7 +72,6 @@ penpot.ui.onMessage((message) => {
   }
 
   function getHTML(){
-
     // let theHTML = penpot.generateMarkup(selectItem)
 
   }
